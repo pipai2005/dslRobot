@@ -1,0 +1,535 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    LBRACE
+    RBRACE
+    SEMI
+
+Grammar
+
+Rule 0     S' -> script
+Rule 1     script -> scene_stmt intent_stmt if_blocks
+Rule 2     scene_stmt -> SCENE IDENT
+Rule 3     intent_stmt -> ON_INTENT IDENT
+Rule 4     if_blocks -> if_block
+Rule 5     if_blocks -> if_block else_block
+Rule 6     if_blocks -> if_blocks else_if_block
+Rule 7     if_blocks -> if_blocks else_block
+Rule 8     else_if_blocks -> else_if_block
+Rule 9     else_if_blocks -> else_if_blocks else_if_block
+Rule 10    if_block -> IF expr REPLY STRING
+Rule 11    else_if_block -> ELSE IF expr REPLY STRING
+Rule 12    else_block -> ELSE REPLY STRING
+Rule 13    expr -> expr logical_op expr
+Rule 14    expr -> LPAREN expr RPAREN
+Rule 15    expr -> atom
+Rule 16    atom -> IDENT compare_op value
+Rule 17    atom -> IDENT
+Rule 18    value -> NUMBER
+Rule 19    value -> STRING
+Rule 20    logical_op -> AND
+Rule 21    logical_op -> OR
+Rule 22    compare_op -> LE
+Rule 23    compare_op -> GE
+Rule 24    compare_op -> LT
+Rule 25    compare_op -> GT
+Rule 26    compare_op -> EQ
+Rule 27    compare_op -> NE
+
+Terminals, with rules where they appear
+
+AND                  : 20
+ELSE                 : 11 12
+EQ                   : 26
+GE                   : 23
+GT                   : 25
+IDENT                : 2 3 16 17
+IF                   : 10 11
+LBRACE               : 
+LE                   : 22
+LPAREN               : 14
+LT                   : 24
+NE                   : 27
+NUMBER               : 18
+ON_INTENT            : 3
+OR                   : 21
+RBRACE               : 
+REPLY                : 10 11 12
+RPAREN               : 14
+SCENE                : 2
+SEMI                 : 
+STRING               : 10 11 12 19
+error                : 
+
+Nonterminals, with rules where they appear
+
+atom                 : 15
+compare_op           : 16
+else_block           : 5 7
+else_if_block        : 6 8 9
+else_if_blocks       : 9
+expr                 : 10 11 13 13 14
+if_block             : 4 5
+if_blocks            : 1 6 7
+intent_stmt          : 1
+logical_op           : 13
+scene_stmt           : 1
+script               : 0
+value                : 16
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . script
+    (1) script -> . scene_stmt intent_stmt if_blocks
+    (2) scene_stmt -> . SCENE IDENT
+
+    SCENE           shift and go to state 3
+
+    script                         shift and go to state 1
+    scene_stmt                     shift and go to state 2
+
+state 1
+
+    (0) S' -> script .
+
+
+
+state 2
+
+    (1) script -> scene_stmt . intent_stmt if_blocks
+    (3) intent_stmt -> . ON_INTENT IDENT
+
+    ON_INTENT       shift and go to state 5
+
+    intent_stmt                    shift and go to state 4
+
+state 3
+
+    (2) scene_stmt -> SCENE . IDENT
+
+    IDENT           shift and go to state 6
+
+
+state 4
+
+    (1) script -> scene_stmt intent_stmt . if_blocks
+    (4) if_blocks -> . if_block
+    (5) if_blocks -> . if_block else_block
+    (6) if_blocks -> . if_blocks else_if_block
+    (7) if_blocks -> . if_blocks else_block
+    (10) if_block -> . IF expr REPLY STRING
+
+    IF              shift and go to state 9
+
+    if_blocks                      shift and go to state 7
+    if_block                       shift and go to state 8
+
+state 5
+
+    (3) intent_stmt -> ON_INTENT . IDENT
+
+    IDENT           shift and go to state 10
+
+
+state 6
+
+    (2) scene_stmt -> SCENE IDENT .
+
+    ON_INTENT       reduce using rule 2 (scene_stmt -> SCENE IDENT .)
+
+
+state 7
+
+    (1) script -> scene_stmt intent_stmt if_blocks .
+    (6) if_blocks -> if_blocks . else_if_block
+    (7) if_blocks -> if_blocks . else_block
+    (11) else_if_block -> . ELSE IF expr REPLY STRING
+    (12) else_block -> . ELSE REPLY STRING
+
+    $end            reduce using rule 1 (script -> scene_stmt intent_stmt if_blocks .)
+    ELSE            shift and go to state 13
+
+    else_if_block                  shift and go to state 11
+    else_block                     shift and go to state 12
+
+state 8
+
+    (4) if_blocks -> if_block .
+    (5) if_blocks -> if_block . else_block
+    (12) else_block -> . ELSE REPLY STRING
+
+  ! shift/reduce conflict for ELSE resolved as shift
+    $end            reduce using rule 4 (if_blocks -> if_block .)
+    ELSE            shift and go to state 15
+
+  ! ELSE            [ reduce using rule 4 (if_blocks -> if_block .) ]
+
+    else_block                     shift and go to state 14
+
+state 9
+
+    (10) if_block -> IF . expr REPLY STRING
+    (13) expr -> . expr logical_op expr
+    (14) expr -> . LPAREN expr RPAREN
+    (15) expr -> . atom
+    (16) atom -> . IDENT compare_op value
+    (17) atom -> . IDENT
+
+    LPAREN          shift and go to state 17
+    IDENT           shift and go to state 19
+
+    expr                           shift and go to state 16
+    atom                           shift and go to state 18
+
+state 10
+
+    (3) intent_stmt -> ON_INTENT IDENT .
+
+    IF              reduce using rule 3 (intent_stmt -> ON_INTENT IDENT .)
+
+
+state 11
+
+    (6) if_blocks -> if_blocks else_if_block .
+
+    ELSE            reduce using rule 6 (if_blocks -> if_blocks else_if_block .)
+    $end            reduce using rule 6 (if_blocks -> if_blocks else_if_block .)
+
+
+state 12
+
+    (7) if_blocks -> if_blocks else_block .
+
+    ELSE            reduce using rule 7 (if_blocks -> if_blocks else_block .)
+    $end            reduce using rule 7 (if_blocks -> if_blocks else_block .)
+
+
+state 13
+
+    (11) else_if_block -> ELSE . IF expr REPLY STRING
+    (12) else_block -> ELSE . REPLY STRING
+
+    IF              shift and go to state 20
+    REPLY           shift and go to state 21
+
+
+state 14
+
+    (5) if_blocks -> if_block else_block .
+
+    ELSE            reduce using rule 5 (if_blocks -> if_block else_block .)
+    $end            reduce using rule 5 (if_blocks -> if_block else_block .)
+
+
+state 15
+
+    (12) else_block -> ELSE . REPLY STRING
+
+    REPLY           shift and go to state 21
+
+
+state 16
+
+    (10) if_block -> IF expr . REPLY STRING
+    (13) expr -> expr . logical_op expr
+    (20) logical_op -> . AND
+    (21) logical_op -> . OR
+
+    REPLY           shift and go to state 22
+    AND             shift and go to state 24
+    OR              shift and go to state 25
+
+    logical_op                     shift and go to state 23
+
+state 17
+
+    (14) expr -> LPAREN . expr RPAREN
+    (13) expr -> . expr logical_op expr
+    (14) expr -> . LPAREN expr RPAREN
+    (15) expr -> . atom
+    (16) atom -> . IDENT compare_op value
+    (17) atom -> . IDENT
+
+    LPAREN          shift and go to state 17
+    IDENT           shift and go to state 19
+
+    expr                           shift and go to state 26
+    atom                           shift and go to state 18
+
+state 18
+
+    (15) expr -> atom .
+
+    REPLY           reduce using rule 15 (expr -> atom .)
+    AND             reduce using rule 15 (expr -> atom .)
+    OR              reduce using rule 15 (expr -> atom .)
+    RPAREN          reduce using rule 15 (expr -> atom .)
+
+
+state 19
+
+    (16) atom -> IDENT . compare_op value
+    (17) atom -> IDENT .
+    (22) compare_op -> . LE
+    (23) compare_op -> . GE
+    (24) compare_op -> . LT
+    (25) compare_op -> . GT
+    (26) compare_op -> . EQ
+    (27) compare_op -> . NE
+
+    REPLY           reduce using rule 17 (atom -> IDENT .)
+    AND             reduce using rule 17 (atom -> IDENT .)
+    OR              reduce using rule 17 (atom -> IDENT .)
+    RPAREN          reduce using rule 17 (atom -> IDENT .)
+    LE              shift and go to state 28
+    GE              shift and go to state 29
+    LT              shift and go to state 30
+    GT              shift and go to state 31
+    EQ              shift and go to state 32
+    NE              shift and go to state 33
+
+    compare_op                     shift and go to state 27
+
+state 20
+
+    (11) else_if_block -> ELSE IF . expr REPLY STRING
+    (13) expr -> . expr logical_op expr
+    (14) expr -> . LPAREN expr RPAREN
+    (15) expr -> . atom
+    (16) atom -> . IDENT compare_op value
+    (17) atom -> . IDENT
+
+    LPAREN          shift and go to state 17
+    IDENT           shift and go to state 19
+
+    expr                           shift and go to state 34
+    atom                           shift and go to state 18
+
+state 21
+
+    (12) else_block -> ELSE REPLY . STRING
+
+    STRING          shift and go to state 35
+
+
+state 22
+
+    (10) if_block -> IF expr REPLY . STRING
+
+    STRING          shift and go to state 36
+
+
+state 23
+
+    (13) expr -> expr logical_op . expr
+    (13) expr -> . expr logical_op expr
+    (14) expr -> . LPAREN expr RPAREN
+    (15) expr -> . atom
+    (16) atom -> . IDENT compare_op value
+    (17) atom -> . IDENT
+
+    LPAREN          shift and go to state 17
+    IDENT           shift and go to state 19
+
+    expr                           shift and go to state 37
+    atom                           shift and go to state 18
+
+state 24
+
+    (20) logical_op -> AND .
+
+    LPAREN          reduce using rule 20 (logical_op -> AND .)
+    IDENT           reduce using rule 20 (logical_op -> AND .)
+
+
+state 25
+
+    (21) logical_op -> OR .
+
+    LPAREN          reduce using rule 21 (logical_op -> OR .)
+    IDENT           reduce using rule 21 (logical_op -> OR .)
+
+
+state 26
+
+    (14) expr -> LPAREN expr . RPAREN
+    (13) expr -> expr . logical_op expr
+    (20) logical_op -> . AND
+    (21) logical_op -> . OR
+
+    RPAREN          shift and go to state 38
+    AND             shift and go to state 24
+    OR              shift and go to state 25
+
+    logical_op                     shift and go to state 23
+
+state 27
+
+    (16) atom -> IDENT compare_op . value
+    (18) value -> . NUMBER
+    (19) value -> . STRING
+
+    NUMBER          shift and go to state 40
+    STRING          shift and go to state 41
+
+    value                          shift and go to state 39
+
+state 28
+
+    (22) compare_op -> LE .
+
+    NUMBER          reduce using rule 22 (compare_op -> LE .)
+    STRING          reduce using rule 22 (compare_op -> LE .)
+
+
+state 29
+
+    (23) compare_op -> GE .
+
+    NUMBER          reduce using rule 23 (compare_op -> GE .)
+    STRING          reduce using rule 23 (compare_op -> GE .)
+
+
+state 30
+
+    (24) compare_op -> LT .
+
+    NUMBER          reduce using rule 24 (compare_op -> LT .)
+    STRING          reduce using rule 24 (compare_op -> LT .)
+
+
+state 31
+
+    (25) compare_op -> GT .
+
+    NUMBER          reduce using rule 25 (compare_op -> GT .)
+    STRING          reduce using rule 25 (compare_op -> GT .)
+
+
+state 32
+
+    (26) compare_op -> EQ .
+
+    NUMBER          reduce using rule 26 (compare_op -> EQ .)
+    STRING          reduce using rule 26 (compare_op -> EQ .)
+
+
+state 33
+
+    (27) compare_op -> NE .
+
+    NUMBER          reduce using rule 27 (compare_op -> NE .)
+    STRING          reduce using rule 27 (compare_op -> NE .)
+
+
+state 34
+
+    (11) else_if_block -> ELSE IF expr . REPLY STRING
+    (13) expr -> expr . logical_op expr
+    (20) logical_op -> . AND
+    (21) logical_op -> . OR
+
+    REPLY           shift and go to state 42
+    AND             shift and go to state 24
+    OR              shift and go to state 25
+
+    logical_op                     shift and go to state 23
+
+state 35
+
+    (12) else_block -> ELSE REPLY STRING .
+
+    ELSE            reduce using rule 12 (else_block -> ELSE REPLY STRING .)
+    $end            reduce using rule 12 (else_block -> ELSE REPLY STRING .)
+
+
+state 36
+
+    (10) if_block -> IF expr REPLY STRING .
+
+    ELSE            reduce using rule 10 (if_block -> IF expr REPLY STRING .)
+    $end            reduce using rule 10 (if_block -> IF expr REPLY STRING .)
+
+
+state 37
+
+    (13) expr -> expr logical_op expr .
+    (13) expr -> expr . logical_op expr
+    (20) logical_op -> . AND
+    (21) logical_op -> . OR
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+    REPLY           reduce using rule 13 (expr -> expr logical_op expr .)
+    RPAREN          reduce using rule 13 (expr -> expr logical_op expr .)
+    AND             shift and go to state 24
+    OR              shift and go to state 25
+
+  ! AND             [ reduce using rule 13 (expr -> expr logical_op expr .) ]
+  ! OR              [ reduce using rule 13 (expr -> expr logical_op expr .) ]
+
+    logical_op                     shift and go to state 23
+
+state 38
+
+    (14) expr -> LPAREN expr RPAREN .
+
+    REPLY           reduce using rule 14 (expr -> LPAREN expr RPAREN .)
+    AND             reduce using rule 14 (expr -> LPAREN expr RPAREN .)
+    OR              reduce using rule 14 (expr -> LPAREN expr RPAREN .)
+    RPAREN          reduce using rule 14 (expr -> LPAREN expr RPAREN .)
+
+
+state 39
+
+    (16) atom -> IDENT compare_op value .
+
+    REPLY           reduce using rule 16 (atom -> IDENT compare_op value .)
+    AND             reduce using rule 16 (atom -> IDENT compare_op value .)
+    OR              reduce using rule 16 (atom -> IDENT compare_op value .)
+    RPAREN          reduce using rule 16 (atom -> IDENT compare_op value .)
+
+
+state 40
+
+    (18) value -> NUMBER .
+
+    REPLY           reduce using rule 18 (value -> NUMBER .)
+    AND             reduce using rule 18 (value -> NUMBER .)
+    OR              reduce using rule 18 (value -> NUMBER .)
+    RPAREN          reduce using rule 18 (value -> NUMBER .)
+
+
+state 41
+
+    (19) value -> STRING .
+
+    REPLY           reduce using rule 19 (value -> STRING .)
+    AND             reduce using rule 19 (value -> STRING .)
+    OR              reduce using rule 19 (value -> STRING .)
+    RPAREN          reduce using rule 19 (value -> STRING .)
+
+
+state 42
+
+    (11) else_if_block -> ELSE IF expr REPLY . STRING
+
+    STRING          shift and go to state 43
+
+
+state 43
+
+    (11) else_if_block -> ELSE IF expr REPLY STRING .
+
+    ELSE            reduce using rule 11 (else_if_block -> ELSE IF expr REPLY STRING .)
+    $end            reduce using rule 11 (else_if_block -> ELSE IF expr REPLY STRING .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for ELSE in state 8 resolved as shift
+WARNING: shift/reduce conflict for AND in state 37 resolved as shift
+WARNING: shift/reduce conflict for OR in state 37 resolved as shift

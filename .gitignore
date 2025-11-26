@@ -1,0 +1,13 @@
+# Python相关冗余文件
+__pycache__/
+*.pyc
+*.pyo
+venv/  # 若使用虚拟环境，需排除
+
+# 敏感配置文件（核心，禁止提交密钥）
+config/.env
+
+# 测试日志/临时文件
+test/logs/
+*.log
+tmp/

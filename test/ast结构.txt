@@ -1,0 +1,21 @@
+ScriptNode(
+    scene=SceneNode(name="手机"),
+    intent=IntentNode(name="商品推荐"),
+    if_blocks=IfBlocksNode(
+        if_block=IfBlockNode(
+            condition=BinaryOpNode(
+                left=CompareNode(ident="预算", op="<=", value=1000),
+                op="AND",
+                right=CompareNode(ident="品牌", op="==", value="华为")
+            ),
+            reply="推荐华为畅享系列"
+        ),
+        else_if_blocks=[
+            ElseIfBlockNode(
+                condition=CompareNode(ident="预算", op=">", value=2000),
+                reply="推荐华为Mate系列"
+            )
+        ],
+        else_block=ElseBlockNode(reply="暂无匹配推荐")
+    )
+)
