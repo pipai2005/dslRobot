@@ -19,7 +19,7 @@ def p_scene_stmt(p):
 
 def p_intent_stmt(p):
     '''intent_stmt : ON_INTENT IDENT'''
-    valid_intents = ['商品推荐', '价格查询', '功能对比', '库存查询']
+    valid_intents = ['自然沟通','商品推荐', '价格查询', '功能对比', '库存查询']
     if p[2] not in valid_intents:
         raise SyntaxError(f'不支持的意图: {p[2]}，支持的意图有: {valid_intents}')
     p[0] = IntentNode(p[2])

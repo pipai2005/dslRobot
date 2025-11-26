@@ -10,7 +10,7 @@ tokens = (
     # 字符串和数字
     'NUMBER','STRING',
     # 其他符号
-    'LPAREN','RPAREN','LBRACE','RBRACE','SEMI'
+    'LPAREN','RPAREN'
 )
 
 # 关键字表
@@ -33,9 +33,6 @@ t_EQ = r'=='
 t_NE = r'!='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
-t_LBRACE = r'\{'
-t_RBRACE = r'\}'
-t_SEMI   = r';'
 
 def t_IDENT(t):
     r'[a-zA-Z_\u4e00-\u9fa5][a-zA-Z0-9_\u4e00-\u9fa5]*'
