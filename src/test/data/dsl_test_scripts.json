@@ -1,0 +1,14 @@
+{
+  "scripts": [
+    {
+      "name": "自然沟通脚本",
+      "content": "SCENE 通用\nON_INTENT 自然沟通\nIF intent == \"自然沟通\"\n    REPLY \"您好！我是智能商品助手。\"\nELSE\n    REPLY \"请继续说明您的需求。\"",
+      "expected_reply": "您好！我是智能商品助手。"
+    },
+    {
+      "name": "价格查询脚本",
+      "content": "SCENE 通用\nON_INTENT 价格查询\nIF 品牌 AND 型号\n    REPLY \"PRICE_QUERY_TEMPLATE:{brand}{model}价格为{budget}元\"\nELSE\n    REPLY \"请提供品牌和型号。\"",
+      "expected_reply_template": "PRICE_QUERY_TEMPLATE:{brand}{model}价格为{budget}元"
+    }
+  ]
+}

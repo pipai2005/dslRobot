@@ -1,6 +1,6 @@
 import os
 import re
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 from src.lexer import lexer
 from src.parser import parser, reset_parser
 from src.qwen_api import QWENAPI
@@ -34,10 +34,9 @@ class DSLManager:
 
         # 意图到DSL文件的映射
         self.intent_to_dsl = {
-            '商品推荐': 'generic_recommendation.dsl', # <--- 使用通用推荐脚本
+            '商品推荐': 'generic_recommendation.dsl',
             '价格查询': 'price_query.dsl', 
             '库存查询': 'stock_query.dsl', 
-            '功能对比': 'feature_compare.dsl',
             '自然沟通': 'natural_chat.dsl'
         }
         
@@ -221,8 +220,7 @@ class DSLManager:
             
             # 2. 意图识别
             print("正在进行意图识别...")
-            intent_result = self.recognizer.recognize_intent(user_input)
-            
+            intent_result = self.recognizer.recognize_intent(user_input)        
             # 意图识别为空的兜底逻辑
             if not intent_result:
                 print("意图识别为空，切换至默认自然沟通模式...")
@@ -232,7 +230,12 @@ class DSLManager:
             
             # 从原始结果中尝试获取问题参数
             # LLM有时会将问题类型识别到params中，例如：'params': {'问题': '库存'}
-            problem_type = intent_result.get('params', {}).get('问题', '') 
+            params = intent_result.get('params', {})
+            if not isinstance(params, dict):
+                params = {} # 如果是字符串（如“无”）或其他非字典类型，设置为空字典
+
+            # 从原始结果中尝试获取问题参数
+            problem_type = params.get('问题', '')
             
             # 优先级 1: 明确的库存查询关键词 - 覆盖所有意图，包括错误的“价格查询”
             if '库存' in user_input or '还剩' in user_input or '有货' in user_input or '存货' in user_input or problem_type == '库存':
@@ -284,7 +287,7 @@ class DSLManager:
             result = executor.execute(ast)          
             final_reply = result.get('reply', '抱歉，没有找到合适的结果')
 
-            # 7. 如果意图是推荐，则处理模板
+            # 7. 处理模板
             intent = self.sym_tbl.get('intent')
             
             if intent == '价格查询':
@@ -292,7 +295,7 @@ class DSLManager:
             elif intent == '库存查询':
                 final_reply = self._process_stock_query(final_reply)
             elif intent == '商品推荐':
-                 final_reply = self._process_recommendation(final_reply)# 8. 通用占位符替换（针对非 SEARCH_TEMPLATE 的纯文本回复）
+                 final_reply = self._process_recommendation(final_reply, intent_result)# 8. 通用占位符替换（针对非 SEARCH_TEMPLATE 的纯文本回复）
          
              # 解决像 "请提供更多需求...{category}" 这种在 ELSE 块中出现的占位符
             if '{category}' in final_reply:
@@ -311,9 +314,17 @@ class DSLManager:
             
             
         except Exception as e:
-            # ... (错误处理) ...
-            return "系统正忙，请稍后再试。"
-
+            # 🚨 临时修改，以便在测试运行时看到真正的错误堆栈
+            import traceback
+            print("\n" + "="*50)
+            print("【致命错误】DSLManager.execute_dsl 中发生异常！")
+            traceback.print_exc()
+            print("="*50 + "\n")
+            
+            # 返回错误信息，但此时已经打印了堆栈
+            return self.error_reply # '系统正忙，请稍后再试。'
+            
+        return self._process_reply_template(raw_reply)
 
     def extract_parameters(self, intent_result: Dict) -> None:
         self.sym_tbl.clear()

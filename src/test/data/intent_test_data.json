@@ -1,0 +1,24 @@
+{
+  "test_cases": [
+    {
+      "user_input": "推荐3000元的小米手机",
+      "expected_intent": "商品推荐",
+      "expected_result_part": "推荐"
+    },
+    {
+      "user_input": "优衣库超轻羽绒服多少钱？",
+      "expected_intent": "价格查询",
+      "expected_result_part": "价格"
+    },
+    {
+      "user_input": "三只松鼠坚果礼盒有货吗？",
+      "expected_intent": "库存查询",
+      "expected_result_part": "库存"
+    },
+    {
+      "user_input": "你好，介绍一下你的功能",
+      "expected_intent": "自然沟通",
+      "expected_result_part": "助手"
+    }
+  ]
+}
