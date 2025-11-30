@@ -6,7 +6,7 @@ from DSLManager import DSLManager
 def main():
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
     print("===== 智能商品推荐系统 =====")
-    print("支持：商品推荐、价格查询、功能对比、库存查询")
+    print("支持：商品推荐、价格查询、库存查询、自然沟通")
     print("输入'退出'结束程序")
     print("=" * 40)
     

@@ -48,7 +48,7 @@ class QWENAPI:
         
         user_prompt = f"用户输入：{user_input}"
 
-        # 2. 调用OpenAI模型（按SDK v1.0+ 格式发起对话请求）
+        # 2. 调用OpenAI模型
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -56,18 +56,18 @@ class QWENAPI:
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}
                 ],
-                temperature=0.1  # 降低随机性，确保意图识别结果稳定（作业场景需确定性输出）
+                temperature=0.1  # 降低随机性，确保意图识别结果稳定
             )
 
             # 3. 解析模型输出（提取结构化意图结果）
             llm_output = response.choices[0].message.content.strip()
-            # 转换为JSON字典（适配DSL解释器的输入格式）
+            # 转换为JSON字典
             intent_result = json.loads(llm_output)
             return intent_result
 
         # 4. 异常处理（作业“严谨验证”要求：覆盖常见错误场景）
         except json.JSONDecodeError as e:
-            print(f"解析LLM输出失败（非标准JSON）：{llm_output}，错误：{str(e)}")
+            print(f"解析LLM输出失败：{llm_output}，错误：{str(e)}")
             return None
         except KeyError as e:
             print(f"模型输出缺失关键字段：{str(e)}，完整输出：{llm_output}")
