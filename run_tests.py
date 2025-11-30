@@ -57,7 +57,7 @@ def run_data_driven_tests():
     return failed == 0
 
 if __name__ == "__main__":
-    print("=================== 开始执行商品回复机器人测试 =================")
+    print("===================== 开始执行商品回复机器人测试 ===================")
     # 执行单元测试
     print("\n1. 执行单元测试：")
     unit_test_success = run_unit_tests()
@@ -66,8 +66,8 @@ if __name__ == "__main__":
     data_test_success = run_data_driven_tests()
     # 输出最终结果
     if unit_test_success and data_test_success:
-        print("\n=================== 所有测试通过！=====================")
+        print("\n====================== 所有测试通过！========================")
         os._exit(0)
     else:
-        print("\n==================== 部分测试失败！======================")
+        print("\n====================== 部分测试失败！========================")
         os._exit(1)
